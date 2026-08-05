@@ -33,6 +33,8 @@ memory concession, not a stronger version of the protocol.
 | `Vortex_DSE_CSlot_Skew` | replaces the single global slot with a per-node clock, plus Byzantine injection of forged slot stamps and origins |
 | `Vortex_DSE_CSlot_AE` | the agreement layer: `Freeze`, `Reconcile`, `Commit` over the strict mode |
 | `Vortex_DSE_CSlot_AE_Proofs` | deductive proofs for the agreement layer |
+| `Vortex_DSE_CSlot_AE_Refinement` | the agreement cycle as a refinement of the core |
+| `Vortex_DSE_CSlot_AE_Refinement_Proofs` | the refinement theorem |
 
 None of these carries a slot horizon: the ticker is unbounded and the
 adversary may forge any slot in `Nat`. Horizons are a model-checking concern
@@ -42,9 +44,22 @@ states, which is unsound for the temporal properties. `MaxSkew` is the one
 bound that stays in a specification, because it is an assumption the protocol
 relies on rather than a checking artifact.
 
-`Vortex_DSE_CSlot_AE` is specified over the strict admission rule; it is not a
-refinement of the default mode. Extending it to the late-tolerant rule requires
-restating what "no reordering across slots" means, and is not done here.
+`Vortex_DSE_CSlot_AE` is specified over the strict admission rule and is not a
+refinement of anything: its `NextCslot` clears `processed` for every node at a
+slot boundary, which no action of the core can do, and it models no crash.
+
+`Vortex_DSE_CSlot_AE_Refinement` is the same agreement cycle written as an
+actual layer. It carries the core's variables unchanged, lets `processed`
+accumulate, and keeps the per-slot input set in `committed`. Every action is
+either a core action or leaves the core's variables alone, so
+
+```
+THEOREM Refinement == Spec => C!Spec
+```
+
+holds under the identity mapping — proved in
+`Vortex_DSE_CSlot_AE_Refinement_Proofs`, and checked by TLC as a temporal
+property besides.
 
 ## What is checked
 
@@ -57,6 +72,7 @@ in both cases. There are no `OMITTED` steps in these modules.
 | `Vortex_DSE_CSlot_Proofs` | 191 |
 | `Vortex_DSE_CSlot_ExactlyOnce_Proof` | 128 |
 | `Vortex_DSE_CSlot_AE_Proofs` | 32 |
+| `Vortex_DSE_CSlot_AE_Refinement_Proofs` | 25 |
 
 Every model completes in a few seconds. `Vortex_DSE_CSlot_AE` also carries
 Apalache type annotations, but no symbolic model is registered here; the models

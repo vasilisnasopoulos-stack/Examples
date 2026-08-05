@@ -50,6 +50,20 @@
       ]
     },
     {
+      "path": "specifications/VortexDSE/MC_Vortex_DSE_CSlot_AE_Refinement.tla",
+      "features": [],
+      "models": [
+        {
+          "path": "specifications/VortexDSE/MC_Vortex_DSE_CSlot_AE_Refinement.cfg",
+          "runtime": "00:00:02",
+          "mode": "exhaustive search",
+          "result": "success",
+          "totalStates": 103805,
+          "distinctStates": 13389
+        }
+      ]
+    },
+    {
       "path": "specifications/VortexDSE/MC_Vortex_DSE_CSlot_Skew.tla",
       "features": [],
       "models": [
@@ -95,6 +109,19 @@
     },
     {
       "path": "specifications/VortexDSE/Vortex_DSE_CSlot_AE_Proofs.tla",
+      "features": [],
+      "models": [],
+      "proof": {
+        "maxRuntimeMinutes": 1
+      }
+    },
+    {
+      "path": "specifications/VortexDSE/Vortex_DSE_CSlot_AE_Refinement.tla",
+      "features": [],
+      "models": []
+    },
+    {
+      "path": "specifications/VortexDSE/Vortex_DSE_CSlot_AE_Refinement_Proofs.tla",
       "features": [],
       "models": [],
       "proof": {
